@@ -1,7 +1,6 @@
 # MediConnect: Hospital Management System
 
-## System Interface
-*(Drag and drop a screenshot of your Login Terminal and your Dashboard here when editing on GitHub)*
+
 
 ## Application Description
 MediConnect is a comprehensive, role-based hospital management interface built with a high-tech "Noir" aesthetic. It features secure identity access, temporal schedule vectors (appointment booking), and dynamic staff directories. The system enforces strict Role-Based Access Control (RBAC) across three primary clearances:
