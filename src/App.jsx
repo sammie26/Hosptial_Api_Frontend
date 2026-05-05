@@ -3,7 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
-// Base Pages (Root of pages folder)
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Unauthorized from './pages/Unauthorized';
@@ -11,14 +11,13 @@ import Profile from './pages/Profile';
 import Success from './pages/Success';
 import ForgotPassword from './pages/ForgotPassword';
 
-// Admin Subfolder
+
 import DepartmentManagement from './pages/Admin/DepartmentManagement';
 import UserManagement from './pages/Admin/UserManagement';
 import RegisterUser from './pages/Admin/RegisterUser';
 import AccountInfo from './pages/Admin/AccountInfo';
-import AdminSchedule from './pages/Admin/AdminSchedule'; // <--- ADDED IMPORT
+import AdminSchedule from './pages/Admin/AdminSchedule'; 
 
-// Doctor Subfolder
 import DoctorList from './pages/Doctor/DoctorList';
 import DoctorDetails from './pages/Doctor/DoctorDetails';
 import DoctorDashboard from './pages/Doctor/DoctorDashboard';
@@ -26,7 +25,7 @@ import EditDoctor from './pages/Doctor/EditDoctor';
 import VisitRecord from './pages/Doctor/VisitRecord';
 import DoctorProfileSettings from './pages/Doctor/DoctorProfileSettings';
 
-// Patient Subfolder
+
 import PatientPortal from './pages/Patient/PatientPortal';
 import BookAppointment from './pages/Patient/BookAppointment';
 
@@ -38,14 +37,14 @@ function App() {
 
         <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
           <Routes>
-            {/* Public/Basic Routes */}
+            
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/success" element={<Success />} />
 
-            {/* Shared Protected Routes (Logged-in only) */}
+           
             <Route path="/profile" element={
               <ProtectedRoute allowedRoles={['Admin', 'Doctor', 'Patient']}>
                 <Profile />
@@ -64,8 +63,8 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Admin Exclusive Routes */}
-            {/* --- ADDED ROUTE FOR MASTER SCHEDULE --- */}
+            
+            
             <Route path="/admin/schedule" element={
               <ProtectedRoute allowedRoles={['Admin']}>
                 <AdminSchedule />
@@ -102,7 +101,7 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Doctor Exclusive Routes */}
+            
             <Route path="/doctor/schedule" element={
               <ProtectedRoute allowedRoles={['Doctor']}>
                 <DoctorDashboard />
@@ -121,7 +120,7 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Patient Exclusive Routes */}
+            
             <Route path="/patient/portal" element={
               <ProtectedRoute allowedRoles={['Patient']}>
                 <PatientPortal />
@@ -134,7 +133,7 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Catch-all 404 */}
+            
             <Route path="*" element={<div style={{ textAlign: 'center' }}><h2>404 - Page Not Found</h2></div>} />
           </Routes>
         </div>

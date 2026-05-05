@@ -16,7 +16,7 @@ const DoctorProfileSettings = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                // Fetching department vectors and individual profile data
+                
                 const [deptRes, docRes] = await Promise.all([
                     API.get('/departments'),
                     API.get('/doctors/me')

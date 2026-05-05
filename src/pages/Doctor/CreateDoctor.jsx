@@ -14,7 +14,7 @@ const CreateDoctor = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Synchronizing hospital sector mapping
+        
         API.get('/departments')
             .then(res => setDepartments(res.data))
             .catch(() => setStatus({ type: 'error', message: 'Sector synchronization failed.' }));
@@ -23,7 +23,7 @@ const CreateDoctor = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Authorizing new medical officer identity
+            
             await API.post('/doctors', { 
                 name, 
                 email, 

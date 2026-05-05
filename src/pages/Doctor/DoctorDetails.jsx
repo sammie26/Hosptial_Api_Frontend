@@ -44,6 +44,16 @@ const DoctorDetails = () => {
         </div>
     );
 
+    // SAFETY NET: Prevents the white screen crash if the API returns empty data
+    if (!doctor) return (
+        <div style={{ 
+            display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', 
+            background: '#020617', color: '#ff4d4d', fontFamily: "'Outfit', sans-serif", letterSpacing: '2px' 
+        }}>
+            DATA FRAGMENT CORRUPTED OR MISSING.
+        </div>
+    );
+
     return (
         <div style={{ 
             display: 'flex', flexDirection: 'column', alignItems: 'center', 
@@ -121,25 +131,28 @@ const DoctorDetails = () => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        {/* Navigation Routes preserved exactly */}
+                    {/* UPDATED NAVIGATION CONTAINER: Added width: 100% and gap: 30px to force separation */}
+                    <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '30px', flexWrap: 'wrap' }}>
+                        
                         <Link to="/doctors" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#00b4d8', textDecoration: 'none', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>
                             <ArrowLeft size={16} /> RETURN TO DIRECTORY
                         </Link>
 
+                        {/* ULTRA-MINIMAL ADMIN BUTTON */}
                         {currentUser?.role === 'Admin' && (
-                            <Link 
-                                to={`/doctors/edit/${id}`} 
-                                style={{ 
-                                    display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 25px', 
-                                    background: 'rgba(0, 18, 36, 0.9)', border: '2px solid #10b981', 
-                                    color: '#10b981', borderRadius: '50px', textDecoration: 'none', 
-                                    fontSize: '12px', fontWeight: '700', letterSpacing: '1px',
-                                    boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)'
-                                }}
-                            >
-                                <Edit3 size={16} /> ADMIN: OVERRIDE INFO
-                            </Link>
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Link 
+                                    to={`/doctors/edit/${id}`} 
+                                    style={{ 
+                                        display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 12px', 
+                                        background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.3)', 
+                                        color: '#10b981', borderRadius: '30px', textDecoration: 'none', 
+                                        fontSize: '9px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase'
+                                    }}
+                                >
+                                    <Edit3 size={12} /> ADMIN OVERRIDE
+                                </Link>
+                            </motion.div>
                         )}
                     </div>
                 </div>

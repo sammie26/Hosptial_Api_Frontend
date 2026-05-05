@@ -12,7 +12,7 @@ const DoctorDashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetching schedule vectors via encrypted link
+        
         API.get('/appointments')
             .then(res => {
                 setAppointments(res.data);
@@ -25,7 +25,7 @@ const DoctorDashboard = () => {
             });
     }, []);
 
-    // Filter logic for the schedule search engine
+    
     const filteredAppointments = appointments.filter(app => 
         app.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (app.reason && app.reason.toLowerCase().includes(searchQuery.toLowerCase()))

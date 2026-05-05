@@ -77,7 +77,7 @@ const Home = () => {
                         src="/logo.png" 
                         alt="MediConnect Logo" 
                         style={{ 
-                            height: '340px', // Increased size slightly to emphasize hierarchy
+                            height: '340px', 
                             filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 0.15))' 
                         }} 
                         onError={(e) => e.target.style.display = 'none'}
@@ -94,13 +94,13 @@ const Home = () => {
                             
                             {/* NEW: Smaller text with subtle white glow */}
                             <h1 style={{ 
-                                fontSize: '42px', // MUCH smaller brand text
+                                fontSize: '42px', 
                                 fontWeight: '700', 
                                 margin: '0 0 24px 0', 
                                 color: '#ffffff',
                                 letterSpacing: '2px', 
                                 textTransform: 'uppercase',
-                                textShadow: '0 0 12px rgba(255, 255, 255, 0.4)' // More subtle glow
+                                textShadow: '0 0 12px rgba(255, 255, 255, 0.4)' 
                             }}>
                                 MediConnect
                             </h1>
@@ -120,7 +120,7 @@ const Home = () => {
                                 background: 'rgba(0, 0, 0, 0.5)', color: '#ffffff', textDecoration: 'none', 
                                 borderRadius: '50px', fontWeight: '600', fontSize: '14px',
                                 border: '1px solid rgba(0, 180, 216, 0.6)', 
-                                boxShadow: '0 0 30px rgba(0, 180, 216, 0.3), inset 0 0 10px rgba(0, 180, 216, 0.1)', // Subtle button glow
+                                boxShadow: '0 0 30px rgba(0, 180, 216, 0.3), inset 0 0 10px rgba(0, 180, 216, 0.1)', 
                                 backdropFilter: 'blur(10px)', letterSpacing: '2px', textTransform: 'uppercase'
                             }}>
                                 <Lock size={16} color="#00b4d8" strokeWidth={2} /> Secure Login <ArrowRight size={16} color="#00b4d8" />

@@ -21,7 +21,7 @@ const AccountInfo = () => {
     const [actionMessage, setActionMessage] = useState('');
 
     useEffect(() => {
-        // Fetching specific identity vector data
+        
         API.get(`/auth/users/${id}`)
             .then(res => {
                 setUser(res.data);

@@ -3,20 +3,21 @@ import { loginUser } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Key, ShieldCheck, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Key, ShieldCheck, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState(''); 
     
     const { login } = useContext(AuthContext); 
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        setError('');
+        if (e) e.preventDefault(); 
+        setError(''); 
+        
         try {
             const response = await loginUser({ email, password });
             if (response.data && response.data.token) {
@@ -24,10 +25,20 @@ const Login = () => {
                 navigate('/');
             }
         } catch (err) {
-            const message = err.response?.status === 401 
-                ? "Invalid identity credentials." 
-                : "Secure server connection failed.";
-            setError(message);
+            const status = err.response?.status;
+            const errorData = JSON.stringify(err.response?.data || "").toLowerCase();
+
+            if (status === 404 || errorData.includes("not found") || errorData.includes("exist")) {
+                setError("Account does not exist");
+            } else {
+                setError("Issue with password or email");
+            }
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleLogin(e);
         }
     };
 
@@ -72,47 +83,68 @@ const Login = () => {
                     </p>
                 </div>
 
-                {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ color: '#ff4d4d', background: 'rgba(255, 77, 77, 0.05)', border: '1px solid #ff4d4d', padding: '15px', borderRadius: '15px', fontSize: '13px', marginBottom: '30px', textAlign: 'center', fontWeight: '600', letterSpacing: '1px' }}>
-                        {error}
-                    </motion.div>
-                )}
-
-                <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                <div onKeyDown={handleKeyDown} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                    
+                    {/* EMAIL FIELD */}
                     <div style={{ position: 'relative' }}>
-                        <Mail size={18} color="#00b4d8" style={{ position: 'absolute', left: '20px', top: '18px' }} />
+                        <Mail size={18} color={error ? "#ff4d4d" : "#00b4d8"} style={{ position: 'absolute', left: '20px', top: '18px' }} />
                         <input 
-                            type="email" placeholder="EMAIL ADDRESS" value={email} onChange={(e) => setEmail(e.target.value)} required 
+                            type="email" 
+                            placeholder="EMAIL ADDRESS" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            required 
                             style={{ 
                                 width: '100%', padding: '18px 20px 18px 55px', background: 'rgba(255, 255, 255, 0.05)', 
-                                border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '18px', color: 'white', 
-                                fontSize: '15px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Outfit', sans-serif", letterSpacing: '1px'
+                                border: error ? '1px solid #ff4d4d' : '1px solid rgba(255, 255, 255, 0.3)', 
+                                borderRadius: '18px', color: 'white', 
+                                fontSize: '15px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Outfit', sans-serif", letterSpacing: '1px',
+                                transition: '0.3s'
                             }}
                         />
+                        {error === "Account does not exist" && (
+                            <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} style={{ color: '#ff4d4d', fontSize: '13px', marginTop: '12px', marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', letterSpacing: '0.5px' }}>
+                                <AlertCircle size={16} /> Account does not exist
+                            </motion.div>
+                        )}
                     </div>
 
+                    {/* PASSWORD FIELD */}
                     <div style={{ position: 'relative' }}>
-                        <Key size={18} color="#00b4d8" style={{ position: 'absolute', left: '20px', top: '18px' }} />
+                        <Key size={18} color={error === "Issue with password or email" ? "#ff4d4d" : "#00b4d8"} style={{ position: 'absolute', left: '20px', top: '18px' }} />
                         <input 
                             type={showPassword ? "text" : "password"} 
-                            placeholder="PASSWORD" value={password} onChange={(e) => setPassword(e.target.value)} required 
+                            placeholder="PASSWORD" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required 
                             style={{ 
                                 width: '100%', padding: '18px 55px 18px 55px', background: 'rgba(255, 255, 255, 0.05)', 
-                                border: '1px solid rgba(255, 255, 255, 0.3)', borderRadius: '18px', color: 'white', 
-                                fontSize: '15px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Outfit', sans-serif", letterSpacing: '1px'
+                                border: error === "Issue with password or email" ? '1px solid #ff4d4d' : '1px solid rgba(255, 255, 255, 0.3)', 
+                                borderRadius: '18px', color: 'white', 
+                                fontSize: '15px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Outfit', sans-serif", letterSpacing: '1px',
+                                transition: '0.3s'
                             }}
                         />
                         <div 
                             onClick={() => setShowPassword(!showPassword)}
                             style={{ position: 'absolute', right: '20px', top: '18px', cursor: 'pointer', opacity: 0.6 }}
                         >
-                            {showPassword ? <EyeOff size={18} color="#00b4d8" /> : <Eye size={18} color="#00b4d8" />}
+                            {showPassword ? <EyeOff size={18} color={error === "Issue with password or email" ? "#ff4d4d" : "#00b4d8"} /> : <Eye size={18} color={error === "Issue with password or email" ? "#ff4d4d" : "#00b4d8"} />}
                         </div>
+                        {error === "Issue with password or email" && (
+                            <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} style={{ color: '#ff4d4d', fontSize: '13px', marginTop: '12px', marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', letterSpacing: '0.5px' }}>
+                                <AlertCircle size={16} /> Issue with password or email
+                            </motion.div>
+                        )}
                     </div>
 
                     <motion.button 
-                        whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0, 180, 216, 0.8)' }} whileTap={{ scale: 0.95 }}
-                        type="submit" style={{ 
+                        whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0, 180, 216, 0.8)' }} 
+                        whileTap={{ scale: 0.95 }}
+                        type="button" 
+                        onClick={handleLogin} 
+                        style={{ 
                             padding: '20px', background: 'rgba(0, 18, 36, 1)', color: 'white', 
                             border: '3px solid #00b4d8', borderRadius: '60px', 
                             fontWeight: '700', fontSize: '14px', cursor: 'pointer', 
@@ -123,7 +155,7 @@ const Login = () => {
                     >
                         SIGN IN <ArrowRight size={20} strokeWidth={2.5} />
                     </motion.button>
-                </form>
+                </div>
             </motion.div>
         </div>
     );

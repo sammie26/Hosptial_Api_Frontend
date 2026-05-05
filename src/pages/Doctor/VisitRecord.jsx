@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../../services/api';
 import { motion } from 'framer-motion';
-import { Activity, User, Calendar, Clipboard, FileText, CheckCircle, XCircle } from 'lucide-react';
+import { Activity, User, Calendar, CheckCircle, XCircle } from 'lucide-react';
 
 const VisitRecord = () => {
     const { appointmentId } = useParams();
     const navigate = useNavigate();
     
     const [appointment, setAppointment] = useState(null);
-    const [notes, setNotes] = useState('');
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
@@ -28,11 +27,12 @@ const VisitRecord = () => {
     const handleCompleteVisit = async () => {
         setSubmitting(true);
         try {
+            // Status update remains the primary action vector
             await API.patch(`/appointments/${appointmentId}/status`, { status: 'Completed' });
             navigate('/success', { state: { message: `Visit with ${appointment.patientName} completed successfully!` } });
         } catch (err) {
             console.error(err);
-            alert("Error saving medical record and completing visit.");
+            alert("Error finalizing the clinical record.");
             setSubmitting(false);
         }
     };
@@ -85,7 +85,7 @@ const VisitRecord = () => {
                     {/* Patient Context Sector */}
                     <div style={{ 
                         background: 'rgba(255, 255, 255, 0.05)', padding: '30px', borderRadius: '25px', 
-                        border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '40px' 
+                        border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '10px' 
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -107,27 +107,8 @@ const VisitRecord = () => {
                         </div>
                     </div>
 
-                    {/* Clinical Input Sector */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#00b4d8' }}>
-                            <Clipboard size={18} />
-                            <label style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>Clinical Observations / Script</label>
-                        </div>
-                        <textarea 
-                            style={{ 
-                                width: '100%', minHeight: '250px', padding: '25px', borderRadius: '20px', 
-                                background: 'rgba(0, 0, 0, 0.4)', border: '1px solid #00b4d8', 
-                                color: 'white', fontSize: '16px', fontFamily: 'inherit', resize: 'none', 
-                                boxSizing: 'border-box', outline: 'none', lineHeight: '1.6' 
-                            }} 
-                            placeholder="Initiate medical documentation: Vitals, Diagnosis, and Treatment Protocols..."
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                        />
-                    </div>
-
-                    {/* Action Sector */}
-                    <div style={{ display: 'flex', gap: '25px', marginTop: '50px' }}>
+                    {/* Action Sector - Shifted up following removal of Observations text area */}
+                    <div style={{ display: 'flex', gap: '25px', marginTop: '40px' }}>
                         <motion.button 
                             whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(16, 185, 129, 0.4)' }}
                             whileTap={{ scale: 0.95 }}
